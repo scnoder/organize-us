@@ -1,7 +1,9 @@
 from groq import Groq
 import os
+from dotenv import load_dotenv
 
 
+load_dotenv()
 
 def _get_groq_client():
     """Initialize and return a Groq client using GROQ_API_KEY from .env."""
@@ -38,4 +40,4 @@ def run_model(query: str) -> str:
 
     return response.choices[0].message.content
 
-run_model("Hello, I am looking for information on how to organize my immigration process in the US. Can you help me with that?")
+print(run_model("Hello, I am looking for information on how to organize my immigration process in the US. Can you help me with that? My nae is John and I am immigrating from Canada"))
