@@ -185,6 +185,9 @@ function setupDocumentsPage() {
 }
 
 function setupOnboarding() {
+	const input = document.getElementById("chat-input");
+	const send = document.getElementById("chat-send");
+	const chat = document.querySelector(".chat-stream");
 	const steps = Array.from(document.querySelectorAll('[data-onboarding-step]'));
 	const progressBar = document.querySelector('[data-onboarding-progress]');
 	const stepIndicator = document.querySelector('[data-step-indicator]');
@@ -261,4 +264,46 @@ document.addEventListener('DOMContentLoaded', () => {
 	setupDocumentsPage();
 	setupOnboarding();
 	setupScoreRings();
+});
+
+
+// to display the message in the chat stream
+function addMessage(text) {
+    const row = document.createElement("div");
+    row.className = "chat-row";
+
+    const bubble = document.createElement("div");
+    bubble.className = "bubble";
+    bubble.textContent = text;
+
+    row.appendChild(bubble);
+    chat.appendChild(row);
+
+    chat.scrollTop = chat.scrollHeight;
+}
+
+// makes sure went "Send" it clicked
+send.addEventListener("click", async () => {
+
+    const message = input.value.trim();
+
+    if (!message) return;
+
+    addMessage(message); // show user's message
+
+    input.value = "";
+
+    const response = await fetch("https://YOUR-BACKEND-URL/chat", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            message: message
+        })
+    });
+
+    const data = await response.json();
+
+    addMessage(data.response); // show AI reply
 });
